@@ -17,9 +17,27 @@ android {
     }
 
     buildTypes {
-        release {
+        releaseNoDexGuard {
             minifyEnabled false
+            useProguard false
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        // extends releaseNoDexGuard adding DexGuard processing
+        release {
+            initWith buildTypes.releaseNoDexGuard
+            minifyEnabled false //required by dexguard :(
+            useProguard true //enable dexguard
+            //note: in order to remove dexguard completely following check could be done, but not required:
+            // if (gradle.startParameter.taskNames.get(0)?.contains("Release")) {
+            apply plugin: 'dexguard'
+
+            proguardFile getDefaultDexGuardFile('dexguard-release-aggressive.pro')
+            proguardFile 'dexguard-rules.txt'
+
+            //xxx: check how suppress warning as it's ok:
+            // BuildType(release): buildConfigField 'DEXGUARD_PROCESSED' value is being replaced: false -> true
+            buildConfigField "boolean", "DEXGUARD_PROCESSED", "true"
         }
     }
 
@@ -46,6 +64,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.0.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.0.0'
+    implementation 'com.guardsquare.dexguard:dexguard-runtime:8.6.09'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

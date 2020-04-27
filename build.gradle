@@ -5,11 +5,30 @@ buildscript {
     repositories {
         google()
         jcenter()
+
+
+        maven {
+            credentials  {
+                username = "${dexguardMavenUser}"
+                password = "${dexguardMavenPassword}"
+            }
+            url "https://maven.guardsquare.com"
+            // Only search for artifacts with groupId "com.guardsquare.*",
+            content {
+                includeGroupByRegex "com\\.guardsquare.*"
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
         
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        classpath 'com.guardsquare.dexguard:dexguard-gradle-plugin:8.6.09'
+
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -20,6 +39,22 @@ allprojects {
     repositories {
         google()
         jcenter()
+
+
+        maven {
+            credentials  {
+                username = "${dexguardMavenUser}"
+                password = "${dexguardMavenPassword}"
+            }
+            url "https://maven.guardsquare.com"
+            // Only search for artifacts with groupId "com.guardsquare.*",
+            content {
+                includeGroupByRegex "com\\.guardsquare.*"
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
         
     }
 }
