@@ -1,0 +1,2 @@
+rootProject.name='Dexguard issue demo'
+include ':app'
